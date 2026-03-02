@@ -174,17 +174,6 @@ The application follows Flask best practices with:
 - Foreign key enforcement
 - Role-based authorization decorators
 
-## Next Steps
-
-After basic setup, consider adding:
-- Ingredient and instruction editing interfaces
-- Recipe search and filtering UI
-- Dynamic serving size calculator
-- Email notification system
-- Recipe image uploads
-- Export functionality for reports
-- More comprehensive test coverage
-
 ## License
 
-This is a community project for recipe sharing.
+This is a university project for Software Development using Agile methodologies.
