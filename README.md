@@ -37,6 +37,33 @@ open-kitchen/
 └── README.md
 ```
 
+## Overview Diagram
+```mermaid
+graph TB
+    Client[Client Browser<br/>HTML/CSS/JS]
+    Flask[Flask Application<br/>app/__init__.py]
+    Auth[Auth Blueprint<br/>/auth/*]
+    Recipes[Recipes Blueprint<br/>/recipes/*]
+    Dashboard[Dashboard Blueprint<br/>/dashboard/*]
+    Admin[Admin Blueprint<br/>/admin/*]
+    DB[Database Layer<br/>db.py]
+    SQLite[(SQLite Database<br/>community_kitchen.db)]
+    
+    Client -->|HTTP Requests| Flask
+    Flask --> Auth
+    Flask --> Recipes
+    Flask --> Dashboard
+    Flask --> Admin
+    Auth --> DB
+    Recipes --> DB
+    Dashboard --> DB
+    Admin --> DB
+    DB --> SQLite
+    
+    style Flask fill:#3498db,color:#fff
+    style SQLite fill:#2c3e50,color:#fff
+```
+
 ## Installation
 
 1. **Clone the repository** (or use existing directory)
