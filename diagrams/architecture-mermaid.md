@@ -257,38 +257,6 @@ sequenceDiagram
     Browser->>User: Show forked recipe
 ```
 
-## Authorization Flow
-
-```mermaid
-flowchart TD
-    Request[HTTP Request] --> BeforeRequest[before_app_request:<br/>load_logged_in_user]
-    BeforeRequest --> CheckSession{session has<br/>user_id?}
-    
-    CheckSession -->|Yes| LoadUser[SELECT user<br/>JOIN roles<br/>Store in g.user]
-    CheckSession -->|No| SetNull[g.user = None]
-    
-    LoadUser --> RouteHandler[Route Handler]
-    SetNull --> RouteHandler
-    
-    RouteHandler --> HasDecorator{Has<br/>decorator?}
-    
-    HasDecorator -->|@login_required| CheckLogin{g.user<br/>exists?}
-    HasDecorator -->|@curator_required| CheckCurator{g.user exists<br/>AND role='Curator'?}
-    HasDecorator -->|None| Execute[Execute Handler]
-    
-    CheckLogin -->|Yes| Execute
-    CheckLogin -->|No| RedirectLogin[Redirect to /auth/login]
-    
-    CheckCurator -->|Yes| Execute
-    CheckCurator -->|No| DenyAccess[Flash error<br/>Redirect to index]
-    
-    Execute --> Response[Return Response]
-    
-    style CheckLogin fill:#f39c12
-    style CheckCurator fill:#e74c3c
-    style Execute fill:#27ae60
-```
-
 ## Recipe Fork Lineage
 
 ```mermaid
@@ -545,39 +513,6 @@ sequenceDiagram
     Flask->>User: Show forked recipe
 ```
 
-## Authorization Decision Tree
-
-```mermaid
-flowchart TD
-    Start[Incoming Request] --> LoadUser[load_logged_in_user]
-    LoadUser --> CheckSession{Session has<br/>user_id?}
-    
-    CheckSession -->|Yes| QueryDB[Query database<br/>SELECT user JOIN roles]
-    CheckSession -->|No| NoUser[Set g.user = None]
-    
-    QueryDB --> StoreUser[Store in g.user]
-    StoreUser --> RouteCheck[Check Route Decorator]
-    NoUser --> RouteCheck
-    
-    RouteCheck --> DecoratorType{Decorator<br/>Type}
-    
-    DecoratorType -->|None| Allow[Execute Handler]
-    DecoratorType -->|@login_required| LoginCheck{g.user<br/>exists?}
-    DecoratorType -->|@curator_required| CuratorCheck{g.user.role<br/>= 'Curator'?}
-    
-    LoginCheck -->|Yes| Allow
-    LoginCheck -->|No| Deny1[Redirect /auth/login]
-    
-    CuratorCheck -->|Yes| Allow
-    CuratorCheck -->|No| Deny2[Flash error<br/>Redirect to index]
-    
-    Allow --> Response[Return Response]
-    
-    style Allow fill:#27ae60,color:#fff
-    style Deny1 fill:#e74c3c,color:#fff
-    style Deny2 fill:#e74c3c,color:#fff
-```
-
 ## Database Table Relationships
 
 ```mermaid
@@ -684,32 +619,6 @@ flowchart LR
     
     style Factor fill:#f39c12
     style Result fill:#27ae60,color:#fff
-```
-
-## Application Lifecycle
-
-```mermaid
-stateDiagram-v2
-    [*] --> Startup
-    Startup --> LoadConfig: Read .flaskenv
-    LoadConfig --> CreateApp: create_app()
-    CreateApp --> InitDB: db.init_app()
-    InitDB --> RegisterBlueprints: Register all blueprints
-    RegisterBlueprints --> Ready: Server listening on :8080
-    
-    Ready --> HandleRequest: Incoming HTTP request
-    HandleRequest --> LoadUser: before_app_request
-    LoadUser --> RouteMatch: Match route
-    RouteMatch --> CheckAuth: Check decorators
-    CheckAuth --> ExecuteHandler: Execute handler
-    ExecuteHandler --> QueryDB: Database operations
-    QueryDB --> RenderTemplate: Render template
-    RenderTemplate --> Response: Send HTTP response
-    Response --> Ready: Wait for next request
-    
-    Ready --> Shutdown: CTRL+C or kill
-    Shutdown --> CloseDB: close_db()
-    CloseDB --> [*]
 ```
 
 ## Social Interaction Flow
@@ -842,47 +751,6 @@ sequenceDiagram
     
     Index->>Browser: Render index.html with data
     Browser->>Visitor: Display landing page
-```
-
-## Future Architecture Extensions
-
-```mermaid
-graph TB
-    subgraph Current MVP
-        AuthMod[Authentication]
-        RecipeMod[Recipe Management]
-        SocialMod[Social Features]
-        AdminMod[Admin Tools]
-    end
-    
-    subgraph Phase 2 - Enhanced Features
-        Scaling[Dynamic Scaling UI]
-        Email[Email Notifications]
-        Images[Image Uploads]
-        Search[Advanced Search]
-    end
-    
-    subgraph Phase 3 - Advanced Features
-        MealPlan[Meal Planning]
-        Grocery[Grocery Lists]
-        API[REST API]
-        Export[Import/Export]
-    end
-    
-    subgraph Phase 4 - Intelligence
-        AIRec[AI Recipe Suggestions]
-        NutritionCalc[Nutrition Calculator]
-        SmartSearch[Semantic Search]
-    end
-    
-    Current MVP --> Phase 2 - Enhanced Features
-    Phase 2 - Enhanced Features --> Phase 3 - Advanced Features
-    Phase 3 - Advanced Features --> Phase 4 - Intelligence
-    
-    style Current MVP fill:#27ae60,color:#fff
-    style Phase 2 - Enhanced Features fill:#3498db,color:#fff
-    style Phase 3 - Advanced Features fill:#9b59b6,color:#fff
-    style Phase 4 - Intelligence fill:#e74c3c,color:#fff
 ```
 
 ## Deployment Architecture
