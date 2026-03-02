@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Recipe - Open Kitchen{% endblock %}
+
+{% block content %}
+<h1>Create New Recipe</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">Title *</label>
+        <input type="text" name="title" id="title" required>
+    </div>
+
+    <div class="form-group">
+        <label for="template_type">Recipe Type *</label>
+        <select name="template_type" id="template_type" required>
+            <option value="standard">Standard Recipe</option>
+            <option value="quick_tip">Quick Tip</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="base_servings">Base Servings</label>
+        <input type="number" name="base_servings" id="base_servings" min="1">
+    </div>
+
+    <div class="form-group">
+        <label for="prep_time_minutes">Prep Time (minutes)</label>
+        <input type="number" name="prep_time_minutes" id="prep_time_minutes" min="0">
+    </div>
+
+    <div class="form-group">
+        <label for="cook_time_minutes">Cook Time (minutes)</label>
+        <input type="number" name="cook_time_minutes" id="cook_time_minutes" min="0">
+    </div>
+
+    <button type="submit">Create Recipe</button>
+    <a href="{{ url_for('recipes.index') }}" class="btn btn-secondary">Cancel</a>
+</form>
+
+<p style="margin-top: 1rem; color: #7f8c8d;">
+    <small>Note: After creating the recipe, you can add ingredients and instructions.</small>
+</p>
+{% endblock %}

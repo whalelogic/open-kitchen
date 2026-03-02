@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ recipe.title }} - Open Kitchen{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>{{ recipe.title }}</h1>
+    <div class="recipe-meta" style="margin-bottom: 1rem;">
+        <div>By {{ recipe.author_name }} | {{ recipe.template_type|replace('_', ' ')|title }}</div>
+        {% if recipe.base_servings %}
+        <div>Servings: {{ recipe.base_servings }}</div>
+        {% endif %}
+        {% if recipe.prep_time_minutes %}
+        <div>Prep: {{ recipe.prep_time_minutes }} min</div>
+        {% endif %}
+        {% if recipe.cook_time_minutes %}
+        <div>Cook: {{ recipe.cook_time_minutes }} min</div>
+        {% endif %}
+    </div>
+    
+    {% if recipe.description %}
+    <p style="margin-bottom: 1rem;">{{ recipe.description }}</p>
+    {% endif %}
+
+    {% if g.user %}
+    <form method="post" action="{{ url_for('recipes.fork', id=recipe.id) }}" style="display: inline;">
+        <button type="submit" class="btn btn-secondary">Fork Recipe</button>
+    </form>
+    {% endif %}
+</div>
+
+{% if ingredients %}
+<div class="card">
+    <h2>Ingredients</h2>
+    <ul>
+    {% for ing in ingredients %}
+        <li>
+            {{ ing.quantity }} {{ ing.abbreviation or ing.unit_name }} {{ ing.name }}
+            {% if ing.allergen_name %}
+            <span style="color: #e74c3c; font-weight: bold;">({{ ing.allergen_name }})</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if instructions %}
+<div class="card">
+    <h2>Instructions</h2>
+    <ol>
+    {% for step in instructions %}
+        <li>{{ step.content }}</li>
+    {% endfor %}
+    </ol>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>Reviews</h2>
+    {% for review in reviews %}
+    <div style="border-bottom: 1px solid #eee; padding: 1rem 0;">
+        <div style="display: flex; justify-content: space-between;">
+            <strong>{{ review.username }}</strong>
+            <span class="rating">{{ '★' * review.rating }}{{ '☆' * (5 - review.rating) }}</span>
+        </div>
+        {% if review.comment %}
+        <p>{{ review.comment }}</p>
+        {% endif %}
+        <small style="color: #7f8c8d;">{{ review.created_at }}</small>
+    </div>
+    {% else %}
+    <p>No reviews yet. Be the first to review!</p>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h2>Comments</h2>
+    {% for comment in comments %}
+    <div style="border-bottom: 1px solid #eee; padding: 1rem 0;">
+        <strong>{{ comment.username }}</strong>
+        <p>{{ comment.content }}</p>
+        <small style="color: #7f8c8d;">{{ comment.created_at }}</small>
+    </div>
+    {% else %}
+    <p>No comments yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

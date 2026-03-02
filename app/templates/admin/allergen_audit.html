@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Allergen Audit - Admin{% endblock %}
+
+{% block content %}
+<h1>Allergen Audit Report</h1>
+
+<div class="card">
+    <form method="get">
+        <div class="form-group">
+            <label for="allergen_id">Select Allergen</label>
+            <select name="allergen_id" id="allergen_id" onchange="this.form.submit()">
+                <option value="">-- Select an allergen --</option>
+                {% for allergen in allergens %}
+                <option value="{{ allergen.id }}" {% if allergen.id == selected_allergen %}selected{% endif %}>
+                    {{ allergen.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+</div>
+
+{% if recipes %}
+<div class="card">
+    <h2>Recipes Containing Selected Allergen</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="border-bottom: 2px solid #ddd;">
+                <th style="text-align: left; padding: 0.5rem;">Recipe</th>
+                <th style="text-align: left; padding: 0.5rem;">Author</th>
+                <th style="text-align: left; padding: 0.5rem;">Allergen</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for recipe in recipes %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 0.5rem;">
+                    <a href="{{ url_for('recipes.view', id=recipe.id) }}">{{ recipe.title }}</a>
+                </td>
+                <td style="padding: 0.5rem;">{{ recipe.author_name }}</td>
+                <td style="padding: 0.5rem;">{{ recipe.allergen_name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<a href="{{ url_for('admin.index') }}" class="btn btn-secondary">Back to Admin</a>
+{% endblock %}

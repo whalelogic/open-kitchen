@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}My Kitchen - Open Kitchen{% endblock %}
+
+{% block content %}
+<h1>My Kitchen</h1>
+
+{% if notifications %}
+<div class="card">
+    <h2>Recent Notifications</h2>
+    {% for notif in notifications %}
+    <div style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+        <span>{{ notif.message }}</span>
+        <small style="color: #7f8c8d; margin-left: 1rem;">{{ notif.created_at }}</small>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>My Recipes</h2>
+    {% for recipe in authored %}
+    <div style="padding: 1rem 0; border-bottom: 1px solid #eee;">
+        <h3><a href="{{ url_for('recipes.view', id=recipe.id) }}">{{ recipe.title }}</a></h3>
+        <div class="recipe-meta">
+            {% if recipe.avg_rating %}
+            <span class="rating">★ {{ "%.1f"|format(recipe.avg_rating) }}</span>
+            {% endif %}
+            <span>{{ recipe.review_count }} reviews</span>
+        </div>
+    </div>
+    {% else %}
+    <p>You haven't created any recipes yet. <a href="{{ url_for('recipes.create') }}">Create your first recipe!</a></p>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h2>Forked Recipes</h2>
+    {% for recipe in forked %}
+    <div style="padding: 1rem 0; border-bottom: 1px solid #eee;">
+        <h3><a href="{{ url_for('recipes.view', id=recipe.id) }}">{{ recipe.title }}</a></h3>
+        <div class="recipe-meta">
+            <span>Forked from: {{ recipe.parent_title }}</span>
+        </div>
+    </div>
+    {% else %}
+    <p>You haven't forked any recipes yet.</p>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h2>Saved Recipes</h2>
+    {% for recipe in saved %}
+    <div style="padding: 1rem 0; border-bottom: 1px solid #eee;">
+        <h3><a href="{{ url_for('recipes.view', id=recipe.id) }}">{{ recipe.title }}</a></h3>
+        <div class="recipe-meta">
+            <span>By {{ recipe.author_name }}</span>
+            <span>Saved: {{ recipe.saved_at }}</span>
+        </div>
+    </div>
+    {% else %}
+    <p>You haven't saved any recipes yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

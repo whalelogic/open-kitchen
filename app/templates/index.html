@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Open Kitchen{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center; padding: 3rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 2rem;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">🍳 Welcome to Open Kitchen</h1>
+    <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+        A collaborative recipe management system for families and communities
+    </p>
+    {% if not g.user %}
+    <div>
+        <a href="{{ url_for('auth.register') }}" class="btn" style="background: white; color: #667eea; margin: 0 0.5rem;">Get Started</a>
+        <a href="{{ url_for('auth.login') }}" class="btn" style="background: transparent; border: 2px solid white; margin: 0 0.5rem;">Login</a>
+    </div>
+    {% else %}
+    <div>
+        <a href="{{ url_for('recipes.create') }}" class="btn" style="background: white; color: #667eea; margin: 0 0.5rem;">Create Recipe</a>
+        <a href="{{ url_for('dashboard.index') }}" class="btn" style="background: transparent; border: 2px solid white; margin: 0 0.5rem;">My Kitchen</a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="recipe-grid" style="margin-bottom: 2rem;">
+    <div class="card" style="text-align: center;">
+        <h2 style="font-size: 2rem; color: #3498db;">{{ stats.total_recipes }}</h2>
+        <p>Recipes</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h2 style="font-size: 2rem; color: #3498db;">{{ stats.total_users }}</h2>
+        <p>Community Members</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h2 style="font-size: 2rem; color: #3498db;">{{ stats.total_reviews }}</h2>
+        <p>Reviews</p>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h2>Browse by Category</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+        {% for category in categories %}
+        <a href="{{ url_for('recipes.index', category=category.id) }}" 
+           class="btn btn-secondary" 
+           style="padding: 0.5rem 1rem;">
+            {{ category.name }}
+        </a>
+        {% endfor %}
+        <a href="{{ url_for('recipes.index') }}" class="btn" style="padding: 0.5rem 1rem;">View All →</a>
+    </div>
+</div>
+
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2>Recent Recipes</h2>
+        <a href="{{ url_for('recipes.index') }}">View All Recipes →</a>
+    </div>
+    
+    <div class="recipe-grid">
+        {% for recipe in recipes %}
+        <div class="recipe-card">
+            <h3>{{ recipe.title }}</h3>
+            <p>{{ recipe.description[:100] if recipe.description }}{% if recipe.description and recipe.description|length > 100 %}...{% endif %}</p>
+            <div class="recipe-meta">
+                <div>By {{ recipe.author_name }}</div>
+                {% if recipe.avg_rating %}
+                <div class="rating">★ {{ "%.1f"|format(recipe.avg_rating) }} ({{ recipe.review_count }} reviews)</div>
+                {% endif %}
+                {% if recipe.prep_time_minutes or recipe.cook_time_minutes %}
+                <div>⏱️ {{ (recipe.prep_time_minutes or 0) + (recipe.cook_time_minutes or 0) }} min total</div>
+                {% endif %}
+            </div>
+            <a href="{{ url_for('recipes.view', id=recipe.id) }}" class="btn" style="margin-top: 1rem;">View Recipe</a>
+        </div>
+        {% else %}
+        <div class="card">
+            <p style="text-align: center; padding: 2rem;">
+                No recipes yet. {% if g.user %}<a href="{{ url_for('recipes.create') }}">Create the first one!</a>{% else %}<a href="{{ url_for('auth.register') }}">Register</a> to create the first one!{% endif %}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card" style="background: #ecf0f1; text-align: center; padding: 2rem;">
+    <h2>Why Open Kitchen?</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1.5rem; text-align: left;">
+        <div>
+            <h3>📖 Structured Recipes</h3>
+            <p>Store recipes as dynamic data with automatic ingredient scaling, not static text.</p>
+        </div>
+        <div>
+            <h3>🍴 Fork & Personalize</h3>
+            <p>Create your own versions of recipes while maintaining the original lineage.</p>
+        </div>
+        <div>
+            <h3>⚠️ Allergen Safety</h3>
+            <p>Track and filter by allergens for dietary safety and compliance.</p>
+        </div>
+        <div>
+            <h3>👥 Community Driven</h3>
+            <p>Share recipes, leave reviews, and collaborate with your family or community.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

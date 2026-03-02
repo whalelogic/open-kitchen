@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - Open Kitchen{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<div class="recipe-grid">
+    <div class="card">
+        <h2>User Management</h2>
+        <p>Manage users, roles, and notification settings.</p>
+        <a href="{{ url_for('admin.users') }}" class="btn">Manage Users</a>
+    </div>
+
+    <div class="card">
+        <h2>Units Management</h2>
+        <p>Manage measurement units lookup table.</p>
+        <a href="{{ url_for('admin.units') }}" class="btn">Manage Units</a>
+    </div>
+
+    <div class="card">
+        <h2>Most Forked Recipes</h2>
+        <p>View recipes that have been forked the most.</p>
+        <a href="{{ url_for('admin.most_forked') }}" class="btn">View Report</a>
+    </div>
+
+    <div class="card">
+        <h2>Allergen Audit</h2>
+        <p>Filter recipes by allergen content.</p>
+        <a href="{{ url_for('admin.allergen_audit') }}" class="btn">Run Audit</a>
+    </div>
+
+    <div class="card">
+        <h2>User Activity Report</h2>
+        <p>View user contributions in the last 30 days.</p>
+        <a href="{{ url_for('admin.user_activity') }}" class="btn">View Report</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+./venv
+copilot-instructions.md
+__pycache__/
+*.log
+*.sqlite3
+*.db
+.DS_Store
+.idea/
+.vscode/
+*.env
+*.bak
+*.tmp
+
