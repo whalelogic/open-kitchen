@@ -2,8 +2,6 @@
 copilot-instructions.md
 __pycache__/
 *.log
-*.db
-.DS_Store
 .idea/
 .vscode/
 *.env
