@@ -448,3 +448,62 @@ sequenceDiagram
 
     RecipesBP-->>Browser: render view.html (recipe, ingredients, instructions, reviews, …)
 ```
+
+# Use Case diagrams
+
+---
+
+## 2. Use Case Diagrams
+
+### 2a. Recipe Authoring & Forking
+
+```mermaid
+usecaseDiagram
+  actor Guest as G
+  actor User as U
+  actor Curator as C
+
+  rectangle "Open Kitchen" {
+    (Register Account) as UC_Register
+    (Log In) as UC_Login
+
+    (Browse Public Recipes) as UC_Browse
+    (View Recipe) as UC_View
+    (Scale Ingredients by Servings) as UC_Scale
+
+    (Create Recipe) as UC_Create
+    (Assign Categories/Tags) as UC_TagCat
+    (Add/Edit Ingredients) as UC_EditIng
+    (Add/Edit Instructions) as UC_EditInst
+
+    (Fork Recipe) as UC_Fork
+    (Copy Ingredients) as UC_CopyIng
+    (Copy Instructions) as UC_CopyInst
+    (Notify Original Author) as UC_Notify
+    (Log Activity) as UC_Log
+  }
+
+  G --> UC_Register
+  G --> UC_Login
+  G --> UC_Browse
+  G --> UC_View
+
+  U --> UC_Browse
+  U --> UC_View
+  U --> UC_Create
+  U --> UC_Fork
+
+  C --> UC_Create
+
+  UC_View .> UC_Scale : <<include>>
+
+  UC_Create .> UC_TagCat : <<include>>
+  UC_Create .> UC_EditIng : <<include>>
+  UC_Create .> UC_EditInst : <<include>>
+  UC_Create .> UC_Log : <<include>>
+
+  UC_Fork .> UC_CopyIng : <<include>>
+  UC_Fork .> UC_CopyInst : <<include>>
+  UC_Fork .> UC_Log : <<include>>
+
+  UC_Notify ..> UC_Fork : <<extend>>
