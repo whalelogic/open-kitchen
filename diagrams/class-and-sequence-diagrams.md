@@ -449,61 +449,54 @@ sequenceDiagram
     RecipesBP-->>Browser: render view.html (recipe, ingredients, instructions, reviews, …)
 ```
 
-# Use Case diagrams
-
----
-
-## 2. Use Case Diagrams
-
-### 2a. Recipe Authoring & Forking
+### 2a. Recipe Authoring & Forking (Use Case Scenario)
 
 ```mermaid
-usecaseDiagram
-  actor Guest as G
-  actor User as U
-  actor Curator as C
+flowchart LR
 
-  rectangle "Open Kitchen" {
-    (Register Account) as UC_Register
-    (Log In) as UC_Login
+subgraph Open_Kitchen_System
 
-    (Browse Public Recipes) as UC_Browse
-    (View Recipe) as UC_View
-    (Scale Ingredients by Servings) as UC_Scale
+Register[Register Account]
+Login[Log In]
 
-    (Create Recipe) as UC_Create
-    (Assign Categories/Tags) as UC_TagCat
-    (Add/Edit Ingredients) as UC_EditIng
-    (Add/Edit Instructions) as UC_EditInst
+Browse[Browse Public Recipes]
+View[View Recipe]
+Scale[Scale Ingredients by Servings]
 
-    (Fork Recipe) as UC_Fork
-    (Copy Ingredients) as UC_CopyIng
-    (Copy Instructions) as UC_CopyInst
-    (Notify Original Author) as UC_Notify
-    (Log Activity) as UC_Log
-  }
+Create[Create Recipe]
+TagCat[Assign Categories / Tags]
+EditIng[Add/Edit Ingredients]
+EditInst[Add/Edit Instructions]
 
-  G --> UC_Register
-  G --> UC_Login
-  G --> UC_Browse
-  G --> UC_View
+Fork[Fork Recipe]
+CopyIng[Copy Ingredients]
+CopyInst[Copy Instructions]
+Notify[Notify Original Author]
+Log[Log Activity]
 
-  U --> UC_Browse
-  U --> UC_View
-  U --> UC_Create
-  U --> UC_Fork
+end
 
-  C --> UC_Create
+Guest --> Register
+Guest --> Login
+Guest --> Browse
+Guest --> View
 
-  UC_View .> UC_Scale : <<include>>
+User --> Browse
+User --> View
+User --> Create
+User --> Fork
 
-  UC_Create .> UC_TagCat : <<include>>
-  UC_Create .> UC_EditIng : <<include>>
-  UC_Create .> UC_EditInst : <<include>>
-  UC_Create .> UC_Log : <<include>>
+Curator --> Create
 
-  UC_Fork .> UC_CopyIng : <<include>>
-  UC_Fork .> UC_CopyInst : <<include>>
-  UC_Fork .> UC_Log : <<include>>
+View --> Scale
 
-  UC_Notify ..> UC_Fork : <<extend>>
+Create --> TagCat
+Create --> EditIng
+Create --> EditInst
+Create --> Log
+
+Fork --> CopyIng
+Fork --> CopyInst
+Fork --> Log
+Fork --> Notify
+```
